@@ -2,7 +2,7 @@ const express = require('express');
 // require routes folder for api routes /api-define
 const PORT = process.env.PORT || 3001;
 const app = express();
-const path = require('path');
+// const path = require('path');
 const apiRoutes = require('./routes/apiRoutes');
 const htmlRoutes = require('./routes/htmlRoutes');
 // const { notes } = require('./db/notes.json');
@@ -70,8 +70,6 @@ app.listen(PORT, () => {
 //     res.send("DELETE Request Called")
 //   })
 
-  app.listen(PORT, () => {
-    console.log(`API server now on port ${PORT}!`);
-  });
+ 
 
-  module.exports= notes;
+  // module.exports= notes;
