@@ -9,9 +9,12 @@ if (window.location.pathname === '/notes') {
   noteTitle = document.querySelector('.note-title');
   noteText = document.querySelector('.note-textarea');
   saveNoteBtn = document.querySelector('.save-note');
-  newNoteBtn = document.querySelector('.new-note');
+  newNoteBtn = document.getElementById('new-note-btn');
   noteList = document.querySelectorAll('.list-container .list-group');
 }
+
+const API_URL = 'http://localhost:3001/api';
+const NOTES_API_URL = `${API_URL}/notes`;
 
 // Show an element
 const show = (elem) => {
@@ -27,41 +30,30 @@ const hide = (elem) => {
 let activeNote = {};
 
 const getNotes = () =>
-  fetch('/api/notes', {
+  fetch(NOTES_API_URL, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   });
-  
+
 const saveNote = (note) =>
-  fetch('/api/notes', {
+  fetch(NOTES_API_URL, {
     method: 'POST',
     headers: {
-      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(note),
-  })
-  .then(response => {
-    if (response.ok) {
-      return response.json();
-    }
-    alert('Error: ' + response.statusText);
-  })
-  .then(postResponse => {
-    console.log(postResponse);
-    alert('Thank you for adding an animal!');
   });
-  
+
 const deleteNote = (id) =>
-  fetch(`/api/notes/${id}`, {
+  fetch(`${NOTES_API_URL}/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
   });
-  
+
 const renderActiveNote = () => {
   hide(saveNoteBtn);
 
@@ -131,24 +123,25 @@ const handleRenderSaveBtn = () => {
 // Render the list of note titles
 const renderNoteList = async (notes) => {
   let jsonNotes = await notes.json();
+
   if (window.location.pathname === '/notes') {
     noteList.forEach((el) => (el.innerHTML = ''));
   }
-  
+
   let noteListItems = [];
-  
+
   // Returns HTML element with or without a delete button
   const createLi = (text, delBtn = true) => {
     const liEl = document.createElement('li');
     liEl.classList.add('list-group-item');
-    
+
     const spanEl = document.createElement('span');
     spanEl.classList.add('list-item-title');
     spanEl.innerText = text;
     spanEl.addEventListener('click', handleNoteView);
 
     liEl.append(spanEl);
-    
+
     if (delBtn) {
       const delBtnEl = document.createElement('i');
       delBtnEl.classList.add(
@@ -159,7 +152,7 @@ const renderNoteList = async (notes) => {
         'delete-note'
       );
       delBtnEl.addEventListener('click', handleNoteDelete);
-      
+
       liEl.append(delBtnEl);
     }
 
@@ -173,10 +166,10 @@ const renderNoteList = async (notes) => {
   jsonNotes.forEach((note) => {
     const li = createLi(note.title);
     li.dataset.note = JSON.stringify(note);
-    
+
     noteListItems.push(li);
   });
-  
+
   if (window.location.pathname === '/notes') {
     noteListItems.forEach((note) => noteList[0].append(note));
   }
@@ -192,102 +185,4 @@ if (window.location.pathname === '/notes') {
   noteText.addEventListener('keyup', handleRenderSaveBtn);
 }
 
-// getAndRenderNotes();
-
-// const $noteForm = document.querySelector('#noteField');
-
-
-// const handleNoteFormSubmit = event => {
-//   event.preventDefault();
-
-//   // get Note data and organize it
-//   const text = $Form.querySelector('[text="note-text"]').value;
-//   const title = $noteForm.querySelector('[title="note-title"]').value;
-  
-
-//   const noteObject = { text, title};
-
-//   fetch('api/notes', {
-//     method: 'POST',
-//     headers: {
-//       Accept: 'application/json',
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(noteObject)
-//   })
-//     .then(response => {
-//       if (response.ok) {
-//         return response.json();
-//       }
-//       alert('Error: ' + response.statusText);
-//     })
-//     .then(postResponse => {
-//       console.log(postResponse);
-//       alert('Your note has been added');
-//     });
-// };
-
-
-// $noteForm.addEventListener('submit', handleNoteFormSubmit);
-
-
-
-
-
-
-
-// const $noteForm = document.querySelector('#note-form');
-// const $displayArea = document.querySelector('#display-area');
-
-// const printResults = resultArr => {
-//   console.log(resultArr);
-
-//   const notesHTML = resultArr.map(({ id, notes }) => {
-//     return `
-//   <div class="col-12 col-md-5 mb-3">
-//     <div class="card p-3" data-id=${id}>
-//       <h4 class="text-primary">${notes}</h4>
-//     </div>
-//   </div>
-//     `;
-//   });
-
-//   $displayArea.innerHTML = notesHTML.join('');
-// };
-
-// const getNotes = (formData = {}) => {
-//   let queryUrl = '/api/zookeepers?';
-
-//   Object.entries(formData).forEach(([key, value]) => {
-//     queryUrl += `${key}=${value}&`;
-//   });
-
-//   fetch(queryUrl)
-//     .then(response => {
-//       if (!response.ok) {
-//         return alert(`Error: ${response.statusText}`);
-//       }
-//       return response.json();
-//     })
-//     .then(zookeeperArr => {
-//       console.log(zookeeperArr);
-//       printResults(zookeeperArr);
-//     });
-// };
-
-// const handleGetZookeepersSubmit = event => {
-//   event.preventDefault();
-//   const nameHTML = $zookeeperForm.querySelector('[name="name"]');
-//   const name = nameHTML.value;
-
-//   const ageHTML = $zookeeperForm.querySelector('[name="age"]');
-//   const age = ageHTML.value;
-
-//   const zookeeperObject = { name, age };
-
-//   getZookeepers(zookeeperObject);
-// };
-
-// $zookeeperForm.addEventListener('submit', handleGetZookeepersSubmit);
-
-// getZookeepers();
+getAndRenderNotes();

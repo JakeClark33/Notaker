@@ -1,53 +1,52 @@
 const router = require('express').Router();
-// const {findById} = require('../../lib/note');s
-const { notes } = require('../../db/notes.json');
+const Notes = require('../../lib/Notes.js');
+const db = require('../../db/notes.json');
 const notesArray = [];
-require('../../lib/note');
 
-router.get('/notes', (req, res) => {
-  let results = notes;
-  if (req.query) {
-  
-  }
-  res.json(results);
-});
-
-router.get('/notes/:id', (req, res) => {
-  const result = findById(req.params.id, notes);
-  if (result) {
-    res.json(result);
-  } else {
-    res.send(404);
+router.get('', async (_req, res, next) => {
+  try {
+    const notes = await Notes.getNotes();
+    return res.json(Object.values(notes));
+  } catch (err) {
+    return next(err);
   }
 });
 
-router.post('/notes', (req, res) => {
-  // set id based on what the next index of the array will be
-  const note = (req.body, notes);
-    res.json(note);
-    req.body.id = notesArray.length.toString();
-    
-  }
-);
-
-router.put('/notes/:id', (req, res) => {
-  const result = findById(req.params.id, notes);
-  if (result) {
-    res.json(result);
-  } else {
-    res.send(404);
+router.get('/:id', async (req, res, next) => {
+  try {
+    const note = await Notes.getNoteById(req.params.id);
+    return res.json(note);
+  } catch (err) {
+    return next(err);
   }
 });
 
-router.delete('/notes/:id', (req, res) => {
-  const result = findById(req.params.id, notes);
-  if (result) {
-    res.json(result);
-  } else {
-    res.send(404);
+router.post('', async (req, res, next) => {
+  try {
+    const note = await Notes.addNote(req.body);
+    return res.json(note)
+  } catch (err) {
+    return next(err);
   }
 });
 
-router.put('/notes')
+router.put('/:id', async (req, res, next) => {
+  try {
+    const note = await Notes.updateNote(req.body);
+    return res.json(note);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const noteId = req.params.id;
+    const note = await Notes.deleteNoteById(noteId);
+    return res.json(note);
+  } catch (err) {
+    return next(err);
+  }
+});
 
 module.exports = router;
