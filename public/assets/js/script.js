@@ -13,7 +13,7 @@ if (window.location.pathname === '/notes') {
   noteList = document.querySelectorAll('.list-container .list-group');
 }
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = 'https://thawing-lake-07875.herokuapp.com/api';
 const NOTES_API_URL = `${API_URL}/notes`;
 
 // Show an element
