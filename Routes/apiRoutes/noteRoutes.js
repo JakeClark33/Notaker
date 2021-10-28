@@ -1,8 +1,10 @@
 const router = require('express').Router();
-const {findById, createNewNote} = require('../../lib/note');
+// const {findById} = require('../../lib/note');s
 const { notes } = require('../../db/notes.json');
-var notesArray = []
-router.get('/note', (req, res) => {
+const notesArray = [];
+require('../../lib/note');
+
+router.get('/notes', (req, res) => {
   let results = notes;
   if (req.query) {
   
@@ -10,7 +12,7 @@ router.get('/note', (req, res) => {
   res.json(results);
 });
 
-router.get('/note/:id', (req, res) => {
+router.get('/notes/:id', (req, res) => {
   const result = findById(req.params.id, notes);
   if (result) {
     res.json(result);
@@ -21,14 +23,14 @@ router.get('/note/:id', (req, res) => {
 
 router.post('/notes', (req, res) => {
   // set id based on what the next index of the array will be
-  const note = createNewNote(req.body, notes);
+  const note = (req.body, notes);
     res.json(note);
     req.body.id = notesArray.length.toString();
     
   }
 );
 
-router.put('/note/:id', (req, res) => {
+router.put('/notes/:id', (req, res) => {
   const result = findById(req.params.id, notes);
   if (result) {
     res.json(result);
@@ -37,7 +39,7 @@ router.put('/note/:id', (req, res) => {
   }
 });
 
-router.delete('/note/:id', (req, res) => {
+router.delete('/notes/:id', (req, res) => {
   const result = findById(req.params.id, notes);
   if (result) {
     res.json(result);
@@ -46,6 +48,6 @@ router.delete('/note/:id', (req, res) => {
   }
 });
 
-router.put('/note')
+router.put('/notes')
 
 module.exports = router;

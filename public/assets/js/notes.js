@@ -4,11 +4,11 @@ const $displayArea = document.querySelector('#note-textarea');
 const printResults = resultArr => {
   console.log(resultArr);
 
-  const notesHTML = resultArr.map(({ id, name}) => {
+  const notesHTML = resultArr.map(({ id, note}) => {
     return `
   <div class="col-12 col-md-5 mb-3">
     <div data-id=${id}>
-      <h4>${name}</h4>
+      <h4>${note}</h4>
     </div>
   </div>
     `;
