@@ -1,1 +1,0 @@
-web: node src/<thawing-lake-07875>.js
